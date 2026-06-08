@@ -1,0 +1,136 @@
+/* メインコンテンツ・コンテナ */
+.attendance-container {
+    max-width: 840px;
+    margin: 0 auto;
+    padding: 0 20px 40px 20px;
+}
+
+/* タイトル (左側の黒い縦棒) */
+.title {
+    font-size: 20px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    margin-bottom: 35px;
+    padding-left: 12px;
+    border-left: 5px solid #000000;
+    letter-spacing: 0.5px;
+}
+
+/* メインのカード枠 */
+.detail-card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+    overflow: hidden;
+}
+
+/* 各行のレイアウト */
+.form-group {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #eeeeee;
+    min-height: 72px;
+}
+
+.form-group:last-of-type {
+    border-bottom: none;
+}
+
+/* 左側のラベル */
+.form-label {
+    width: 200px;
+    padding-left: 40px;
+    font-size: 13px;
+    color: #666666;
+    user-select: none;
+}
+
+/* 右側の入力・値エリア */
+.form-value {
+    flex: 1;
+    padding: 15px 40px;
+    font-size: 14px;
+}
+
+.font-bold {
+    font-weight: bold;
+    color: #111111;
+}
+
+/* 日付の横並び */
+.date-layout {
+    display: flex;
+    gap: 40px;
+}
+
+/* 時間入力の横並び */
+.time-range {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.tilde {
+    font-size: 16px;
+    color: #111111;
+}
+
+/* 時間入力フォーム */
+.input-time {
+    width: 100px;
+    height: 38px;
+    border: 1px solid #dddddd;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #111111;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.input-time:focus,
+.input-remarks:focus {
+    border-color: #aaaaaa;
+}
+
+.text-center {
+    text-align: center;
+}
+
+/* 備考入力フォーム */
+.input-remarks {
+    width: 320px;
+    height: 38px;
+    border: 1px solid #dddddd;
+    border-radius: 4px;
+    padding: 0 12px;
+    font-size: 14px;
+    color: #111111;
+    outline: none;
+}
+
+/* ボタンエリア */
+.btn-container {
+    display: flex;
+    justify-content: flex-end;
+    padding: 35px 0;
+    background-color: #f5f5f5;
+}
+
+/* 修正ボタン */
+.btn-submit {
+    background-color: #000000;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    padding: 11px 40px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.btn-submit:hover {
+    opacity: 0.8;
+}

@@ -1,0 +1,49 @@
+.main-content {
+    margin: 50px auto;
+    width: 600px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.attendance-status {
+    border-radius: 20px;
+    color: #555555;
+    background-color: #cccccc;
+    font-size: 14px;
+    margin-bottom: 24px;
+    font-weight: 500;
+    padding: 6px 16px;
+}
+
+.date-display {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 16px;
+
+}
+
+.time-display {
+    font-size: 80px;
+    font-weight: bold;
+    margin-bottom: 40px;
+    letter-spacing: 2px;
+}
+
+.attendance-btn {
+    background-color: #000000;
+    color: #ffffff;
+    border: none;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 16px 64px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.attendance-btn:hover {
+    background-color: #333333;
+}
