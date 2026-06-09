@@ -177,8 +177,29 @@ class AttendanceController extends Controller
      
         $formattedDate = Carbon::createFromFormat('m/d', $dateParam)->format('Y-m-d');
         $user = User::where('id',Auth::id())->first();
-        $attendances = Date::where('user_id',Auth::id())->where('date',$formattedDate)->with('attendance')->first();
-        return view('detail',compact('user','attendances'));
+        $date = Date::where('user_id',Auth::id())->where('date',$formattedDate)->with('attendance')->first();
+        return view('detail',compact('user','date'));
+    }
+    public function sendApplication(Request $request)
+    {
+        $dateRecord = Date::find($request->input('date_id'));
+        $dateRecord->update([
+            'application' => 2,
+            'remarks' => $request->input('remarks'),
+            ]);
+        $ymd = Carbon::parse($dateRecord->date)->format('Y-m-d');
+        foreach($request->input('new_attendances') as $data){
+            $fullStartTime = Carbon::parse($ymd.' '.$data['start_time']);
+            $fullEndTime  = Carbon::parse($ymd.' '.$data['end_time']);
+            Attendance::create([
+                'date_id' => $dateRecord->id,
+                'category' => $data['category'],
+                'start_time' =>$fullStartTime,
+                'end_time' => $fullEndTime,
+                'status' => 2,
+            ]);
+        return redirect()->route('attendance-detail')->with('success','申請しました');
+        }
     }
 
 }

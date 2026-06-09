@@ -8,7 +8,8 @@
 
 .login-box {
   width: 100%;
-  max-width: 480px; /* フォームの横幅 */
+  max-width: 480px;
+  /* フォームの横幅 */
 }
 
 .page-title {
@@ -41,7 +42,8 @@
   height: 45px;
   padding: 10px;
   border: 1px solid #000000;
-  border-radius: 0; /* 四角い角を維持 */
+  border-radius: 0;
+  /* 四角い角を維持 */
   font-size: 16px;
   outline: none;
 }
@@ -62,7 +64,8 @@
 }
 
 .submit-btn:hover {
-  background-color: #333333; /* ホバー時に少し明るく */
+  background-color: #333333;
+  /* ホバー時に少し明るく */
 }
 
 /* ==========================================
@@ -73,11 +76,16 @@
 }
 
 .register-link {
-  color: #007bff; /* 青色のリンクカラー */
+  color: #007bff;
+  /* 青色のリンクカラー */
   font-size: 12px;
   text-decoration: none;
 }
 
 .register-link:hover {
   text-decoration: underline;
+}
+
+.alert-text {
+  color: red;
 }
