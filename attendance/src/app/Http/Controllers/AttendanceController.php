@@ -8,6 +8,7 @@ use App\Models\Date;
 use App\Models\Attendance;
 use App\Models\User;
 use Illuminate\Support\Carbon;
+use App\Http\Requests\ApplicationRequest;
 
 class AttendanceController extends Controller
 {
@@ -180,7 +181,7 @@ class AttendanceController extends Controller
         $date = Date::where('user_id',Auth::id())->where('date',$formattedDate)->with('attendance')->first();
         return view('detail',compact('user','date'));
     }
-    public function sendApplication(Request $request)
+    public function sendApplication(ApplicationRequest $request)
     {
         $dateRecord = Date::find($request->input('date_id'));
         $dateRecord->update([
@@ -200,6 +201,17 @@ class AttendanceController extends Controller
             ]);
         return redirect()->route('attendance-detail')->with('success','申請しました');
         }
+    }
+    public function applicationList(){
+        $activeTab = $request->query('tab','pending');
+        if($activeTab === 'pending'){
+            $lists = Date::where('user_id',Auth::id())->where('application',2)->all();
+        }
+        elseif($activeTab === 'approval'){
+
+
+        }
+        return view('application_list');
     }
 
 }

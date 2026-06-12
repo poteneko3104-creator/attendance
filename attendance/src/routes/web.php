@@ -26,4 +26,5 @@ Route::middleware(['auth','verified'])->group(function () {
     Route::get('/list', [AttendanceController::class, 'list'])->name('attendance-list');
     Route::get('/detail', [AttendanceController::class, 'detail'])->name('attendance-detail');
     Route::post('/detail', [AttendanceController::class, 'sendApplication']);
+    Route::get('/applicationList', [AttendanceController::class, 'applicationList'])->name('application_list');
 });

@@ -37,7 +37,7 @@
                 <span class="tilde">〜</span>
                 <input type="text" name="new_attendances[end_time]" class="input-time text-center" value="{{ $attendance->end_time->format('H:i') }}">
             </div>
-            @error('new_attendances.'.$loop->index.'.start_time')
+            @error('new_attendances.'.$loop->index.'.start_time'||'new_attendances.'.$loop->index.'.end_time')
                 <div class="aleart-message">
                     {{$message}}
                 </div>
@@ -59,7 +59,7 @@
                 <span class="tilde">〜</span>
                 <input type="text" name="new_attendances[end_time]" class="input-time text-center" value="{{ $attendance->end_time->format('H:i') }}">
             </div>
-            @error('new_attendances.'.$currentIndex.'.start_time')
+            @error('new_attendances.'.$currentIndex.'.start_time'||'new_attendances.'.$currentIndex.'.end_time')
                 <div class="aleart-message">
                     {{$message}}
                 </div>
@@ -78,7 +78,7 @@
                 <span class="tilde">〜</span>
                 <input type="text" class="input-time text-center" name="new_attendances[end_time]" value="">
             </div>
-            @error('new_attendances.'.$totalCount.'.start_time')
+            @error('new_attendances.'.$totalCount.'.start_time'||'new_attendances.'.$totalCount.'.end_time')
             <div class="aleart-message" >
                 {{ $message }}
             </div>
