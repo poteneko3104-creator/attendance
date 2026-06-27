@@ -7,6 +7,7 @@ use Illuminate\Support\Carbon;
 use App\Models\Date;
 use App\Models\Attendance;
 use App\Models\User;
+use App\Models\Application;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\ApplicationRequest;
 
@@ -184,5 +185,20 @@ class AdminController extends Controller
             'nextMonth' => $nextMonth,
             'dailyReports' => $dailyReports,
         ]);
+    }
+    public function applicationList(Request $request)
+    {
+        $activeTab = $request->query('tab', 'pending');
+        if ($activeTab == 'pending') {
+            $application_items = Application::where('status', 2)->orderBy('application_date', 'asc')->with('date')->with('user')->get();
+        } elseif ($activeTab = 'approved') {
+            $application_items = Application::where('status', 1)->orderBy('approved_date', 'asc')->with('date')->with('user')->get();
+        }
+        return view('admin.application', compact('application_items'));
+    }
+    public function approval(Request $request)
+    {
+        $report = Date::where('id', $request->date_id)->with('attendance')->with('user')->first();
+        return view('admin.approval', compact('report'));
     }
 }

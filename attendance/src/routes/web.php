@@ -44,4 +44,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('/admin/attendance/detail', [AdminController::class, 'update']);
     Route::get('/admin/attendance/staffList', [AdminController::class, 'staffList']);
     Route::get('/admin/attendance/staff', [AdminController::class, 'staffAttendance'])->name('admin_staff-attendance');
+    Route::get('/admin/stamp_correction_request/list', [AdminController::class, 'applicationList'])->name('admin_application-list');
+    Route::get('/admin/stamp_correction_request/approve', [AdminController::class, 'approval'])->name('admin_approval');
 });

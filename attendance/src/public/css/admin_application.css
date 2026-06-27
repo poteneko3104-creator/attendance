@@ -1,0 +1,92 @@
+    .container {
+        max-width: 1000px;
+        margin: 60px auto;
+        padding: 0 20px;
+    }
+
+    .page-title {
+        font-size: 24px;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        margin-bottom: 40px;
+    }
+
+    .page-title::before {
+        content: "";
+        display: inline-block;
+        width: 4px;
+        height: 24px;
+        background-color: #000000;
+        margin-right: 12px;
+    }
+
+
+    .tab-menu {
+        display: flex;
+        list-style: none;
+        border-bottom: 1px solid #cccccc;
+        margin-bottom: 30px;
+        padding-left: 20px;
+    }
+
+
+
+    .tab-item.active {
+        border-bottom: 2px solid #000000;
+    }
+
+
+    .tab-item {
+        font-size: 14px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .tab-item a {
+        display: block;
+        padding: 10px 30px;
+        color: #777777;
+        /* 通常時の文字色 */
+        text-decoration: none;
+    }
+
+    .tab-item.active a {
+        color: #000000;
+    }
+
+
+    .table-wrapper {
+        background-color: #ffffff;
+        border-radius: 4px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        padding: 10px 20px;
+    }
+
+    .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+    }
+
+    .data-table th,
+    .data-table td {
+        padding: 15px 10px;
+        font-size: 14px;
+    }
+
+    .data-table th {
+        color: #777777;
+        font-weight: normal;
+        border-bottom: 1px solid #eeeeee;
+    }
+
+    .data-table td {
+        color: #333333;
+    }
+
+    .link-detail {
+        color: #000000;
+        text-decoration: none;
+        font-weight: bold;
+    }
