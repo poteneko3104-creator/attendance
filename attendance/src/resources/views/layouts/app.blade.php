@@ -12,13 +12,13 @@
 <body>
     <header class="header">
         <div class="header-logo">
-            <img src="images/COACHTECHヘッダーロゴ.png" alt="COACHTECH"> 
+            <img src="/images/COACHTECHヘッダーロゴ.png" alt="COACHTECH"> 
         </div>
         <nav class="header-nav" >
                     @if (Auth::check())
-                    <a href=""><button class="btn-nav">勤怠</button></a>
-                    <a href=""><button class="btn-nav">勤怠一覧</button></a>
-                    <a href=""><button class="btn-nav">申請</button></a>
+                    <a href="/attendance"><button class="btn-nav">勤怠</button></a>
+                    <a href="/list"><button class="btn-nav">勤怠一覧</button></a>
+                    <a href="/applicationList"><button class="btn-nav">申請</button></a>
                     <form action="/logout" method="post">
                         @csrf
                         <button class="btn-nav">ログアウト</button>

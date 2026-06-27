@@ -1,0 +1,95 @@
+.main-container {
+    max-width: 960px;
+    margin: 60px auto;
+    padding: 0 20px;
+}
+
+.page-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+
+.page-title::before {
+    content: "";
+    display: inline-block;
+    width: 6px;
+    height: 28px;
+    background-color: #000000;
+}
+
+.table-card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.staff-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+.staff-table th,
+.staff-table td {
+    padding: 16px 20px;
+    font-size: 14px;
+}
+
+
+.staff-table th {
+    color: #888888;
+    font-weight: normal;
+    border-bottom: 1px solid #eeeeee;
+}
+
+
+.staff-table td {
+    border-bottom: 1px solid #eeeeee;
+    color: #444444;
+}
+
+
+.staff-table tr:last-child td {
+    border-bottom: none;
+}
+
+
+.btn-detail {
+    display: inline-block;
+    font-weight: bold;
+    color: #000000;
+    transition: opacity 0.2s;
+}
+
+.btn-detail:hover {
+    opacity: 0.5;
+}
+
+/* 横幅が狭い画面用のレスポンシブ対応 */
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px;
+    }
+
+    .nav__list {
+        gap: 15px;
+    }
+
+    .main-container {
+        margin: 30px auto;
+    }
+
+    .staff-table th,
+    .staff-table td {
+        padding: 12px 10px;
+        font-size: 12px;
+    }
+}

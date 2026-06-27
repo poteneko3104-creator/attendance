@@ -11,6 +11,9 @@ class Date extends Model
     protected $fillable = ['user_id', 'date', 'application', 'remarks', 'status'];
     public function attendance()
     {
-        return $this->hasMany(Attendance::class); // または hasOne など
+        return $this->hasMany(Attendance::class);
+    }
+    public function user(){
+        return $this->belongsTo(User::class);
     }
 }

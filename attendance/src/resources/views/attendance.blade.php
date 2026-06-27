@@ -45,28 +45,28 @@
         @endif
     </div>
     <script>
-function updateClock() {
-    const now = new Date();
-    
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, '0'); // 月は0から始まるため+1
-    const date = String(now.getDate()).padStart(2, '0');
-    const dayNames = ['日', '月', '火', '水', '木', '金', '土'];
-    const dayOfWeek = dayNames[now.getDay()];
+        function updateClock() {
+            const now = new Date();
 
-    const hours = String(now.getHours()).padStart(2, '0');
-    const minutes = String(now.getMinutes()).padStart(2, '0');
-    
-    const dateString = `${year}年${month}月${date}日（${dayOfWeek}）`
-    const timeString = `${hours}:${minutes}`;
-    
-    document.getElementById('date-display').textContent = dateString;
-    document.getElementById('time-display').textContent = timeString;
-}
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0'); // 月は0から始まるため+1
+            const date = String(now.getDate()).padStart(2, '0');
+            const dayNames = ['日', '月', '火', '水', '木', '金', '土'];
+            const dayOfWeek = dayNames[now.getDay()];
+
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+
+            const dateString = `${year}年${month}月${date}日（${dayOfWeek}）`
+            const timeString = `${hours}:${minutes}`;
+
+            document.getElementById('date-display').textContent = dateString;
+            document.getElementById('time-display').textContent = timeString;
+        }
 
 
-setInterval(updateClock, 1000);
+        setInterval(updateClock, 1000);
 
-updateClock();
-</script>
+        updateClock();
+    </script>
 @endsection

@@ -1,0 +1,158 @@
+.main-container {
+    max-width: 960px;
+    margin: 60px auto;
+    padding: 0 20px;
+}
+
+.page-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+
+.page-title::before {
+    content: "";
+    display: inline-block;
+    width: 6px;
+    height: 28px;
+    background-color: #000000;
+}
+
+.table-card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.staff-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+.staff-table th,
+.staff-table td {
+    padding: 16px 20px;
+    font-size: 14px;
+}
+
+
+.staff-table th {
+    color: #888888;
+    font-weight: normal;
+    border-bottom: 1px solid #eeeeee;
+}
+
+
+.staff-table td {
+    border-bottom: 1px solid #eeeeee;
+    color: #444444;
+}
+
+
+.staff-table tr:last-child td {
+    border-bottom: none;
+}
+
+
+.btn-detail {
+    display: inline-block;
+    font-weight: bold;
+    color: #000000;
+    transition: opacity 0.2s;
+}
+
+.btn-detail:hover {
+    opacity: 0.5;
+}
+
+.date-pager {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 600px;
+    margin: 0 auto 30px auto;
+}
+
+.date-pager__arrow {
+    font-size: 14px;
+    color: #888888;
+    font-weight: bold;
+    transition: color 0.2s;
+}
+
+.date-pager__arrow:hover {
+    color: #000000;
+}
+
+.date-pager__current {
+    font-size: 18px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.icon-calendar {
+    font-size: 16px;
+}
+
+
+.scrollable-table {
+    max-height: 600px;
+    /* 必要に応じて縦幅を固定 */
+    overflow-y: auto;
+}
+
+
+.row-empty td {
+    color: #aaaaaa;
+}
+
+
+.action-area {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 30px;
+}
+
+
+.btn-csv {
+    background-color: #000000;
+    color: #ffffff;
+    border: none;
+    padding: 12px 45px;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.btn-csv:hover {
+    opacity: 0.8;
+}
+
+
+@media (max-width: 768px) {
+    .date-pager {
+        padding: 0 10px;
+    }
+
+    .date-pager__current {
+        font-size: 16px;
+    }
+
+    .action-area {
+        justify-content: center;
+    }
+
+    .btn-csv {
+        width: 100%;
+    }
+}

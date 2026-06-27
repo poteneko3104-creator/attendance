@@ -16,7 +16,10 @@ class CreateApplicationsTable extends Migration
         Schema::create('applications', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->date('date');
+            $table->foreignId('date_id')->constrained()->cascadeOnDelete();            
+            $table->datetime('application_date');
+            $table->datetime('approved_date')->nullable();
+            $table->integer('status'); //承認済み=1,承認待ち=2            
             $table->timestamps();
         });
     }

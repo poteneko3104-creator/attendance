@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Date;
 use App\Models\Attendance;
+use App\Models\Application;
 use App\Models\User;
 use Illuminate\Support\Carbon;
 use App\Http\Requests\ApplicationRequest;
@@ -54,7 +55,7 @@ class AttendanceController extends Controller
                 Attendance::where('user_id', Auth::id())
                     ->where('date_id', $post->id)
                     ->where('category', '休憩')
-                    ->where('status',1)
+                    ->where('status', 1)
                     ->latest()
                     ->limit(1)
                     ->update(
@@ -70,7 +71,7 @@ class AttendanceController extends Controller
                 Attendance::where('user_id', Auth::id())
                     ->where('date_id', $post->id)
                     ->where('category', '出勤')
-                    ->where('status',1)
+                    ->where('status', 1)
                     ->latest()
                     ->limit(1)
                     ->update(
@@ -82,16 +83,16 @@ class AttendanceController extends Controller
         }
         return redirect('/attendance');
     }
-    
+
     public function list(Request $request)
     {
         $monthParam = $request->query('month', Carbon::now()->format('Y-m'));
 
         try {
-            
+
             $currentMonth = Carbon::parse($monthParam . '-01');
         } catch (\Exception $e) {
-            
+
             $currentMonth = Carbon::now()->startOfMonth();
         }
 
@@ -103,66 +104,63 @@ class AttendanceController extends Controller
         $endDate = $currentMonth->copy()->endOfMonth();
 
         $attendances = Date::where('user_id', Auth::id())
-        ->whereBetween('date', [$startDate, $endDate]) // ※date_columnは実際の日付カラム名に変えてください
-        ->with('attendance')
-        ->get()
-        ->groupBy(function($item) {
-            return Carbon::parse($item->date)->format('Y-m-d');
-        });
+            ->whereBetween('date', [$startDate, $endDate])
+            ->with('attendance')
+            ->get()
+            ->groupBy(function ($item) {
+                return Carbon::parse($item->date)->format('Y-m-d');
+            });
 
-        $dailyReports=[];
-
+        $dailyReports = [];
         for ($date = $startDate; $date->lte($endDate); $date->addDay()) {
             $daysInMonth[] = $date->copy();
             $dayOfWeek = $date->isoFormat('dd');
             $dateString = $date->format('Y-m-d');
-            if($attendances->has($dateString)){
+            if ($attendances->has($dateString)) {
                 $dayAttendances = $attendances[$dateString];
                 $dayRecord = $attendances->get($dateString)?->first();
-                $attend_start = $dayRecord?->attendance?->where('category', '出勤')->where('status',1)->first()?->start_time;
+                $attend_start = $dayRecord?->attendance?->where('category', '出勤')->where('status', 1)->first()?->start_time;
                 $clockIn = Carbon::parse($attend_start);
-                $attend_end = $dayRecord?->attendance?->where('category', '出勤')->where('status',1)->first()?->end_time;
-                $clockOut = $attend_end ? Carbon::parse($attend_end):null;
-                $rests = $dayRecord?->attendance?->where('category','休憩')->where('status',1)->all();
+                $attend_end = $dayRecord?->attendance?->where('category', '出勤')->where('status', 1)->first()?->end_time;
+                $clockOut = $attend_end ? Carbon::parse($attend_end) : null;
+                $rests = $dayRecord?->attendance?->where('category', '休憩')->where('status', 1)->all();
                 $totalRestSeconds = 0;
-                if(isset($rests)){
-                foreach($rests as $rest){
-                    if($rest->end_time){
-                        $totalRestSeconds += Carbon::parse($rest->start_time)->diffInSeconds(Carbon::parse($rest->end_time));
+                if (isset($rests)) {
+                    foreach ($rests as $rest) {
+                        if ($rest->end_time) {
+                            $totalRestSeconds += Carbon::parse($rest->start_time)->diffInSeconds(Carbon::parse($rest->end_time));
+                        }
                     }
                 }
-                }
-                $totalWorkSeconds = $clockOut ? $clockIn->diffInSeconds($clockOut):0;
-                $actualWork_Seconds = max(0,$totalWorkSeconds-$totalRestSeconds);
+                $totalWorkSeconds = $clockOut ? $clockIn->diffInSeconds($clockOut) : 0;
+                $actualWork_Seconds = max(0, $totalWorkSeconds - $totalRestSeconds);
 
-               $dailyReports[] = [
-                    'date' => $date->format('m/d'),
+                $dailyReports[] = [
+                    'date' => $date->copy(),
                     'day_of_week' => "({$dayOfWeek})",
                     'clock_in' => $clockIn->format('H:i'),
                     'clock_out' => $clockOut ? $clockOut->format('H:i') : '-',
                     'rest_time' => $this->formatSecondsToHours($totalRestSeconds),
                     'total_time' => $clockOut ? $this->formatSecondsToHours($actualWork_Seconds) : '-',
-                ];  
-            }
-
-            else{
+                ];
+            } else {
                 $dailyReports[] = [
-                    'date' => $date->format('m/d'),
+                    'date' => $date->copy(),
                     'day_of_week' => "({$dayOfWeek})",
                     'clock_in' => '-',
                     'clock_out' => '-',
                     'rest_time' => '-',
                     'total_time' => '-',
-                 ];  
-        
+                ];
+
             }
         }
 
         return view('list', [
-            'daysInMonth'  => $daysInMonth,
+            'daysInMonth' => $daysInMonth,
             'currentMonth' => $currentMonth,
-            'prevMonth'    => $prevMonth,
-            'nextMonth'    => $nextMonth,
+            'prevMonth' => $prevMonth,
+            'nextMonth' => $nextMonth,
             'dailyReports' => $dailyReports,
         ]);
     }
@@ -175,11 +173,15 @@ class AttendanceController extends Controller
     public function detail(Request $request)
     {
         $dateParam = $request->date;
-     
-        $formattedDate = Carbon::createFromFormat('m/d', $dateParam)->format('Y-m-d');
-        $user = User::where('id',Auth::id())->first();
-        $date = Date::where('user_id',Auth::id())->where('date',$formattedDate)->with('attendance')->first();
-        return view('detail',compact('user','date'));
+        //$formattedDate = $dateParam->format('Y-m-d');
+        $user = User::where('id', Auth::id())->first();
+        $date = Date::where('user_id', Auth::id())->where('date', $dateParam)->with('attendance')->first();
+        if ($date->application == 2) {
+            $status = 2;
+        } else {
+            $status = 1;
+        }
+        return view('detail', compact('user', 'date', 'status'));
     }
     public function sendApplication(ApplicationRequest $request)
     {
@@ -187,31 +189,37 @@ class AttendanceController extends Controller
         $dateRecord->update([
             'application' => 2,
             'remarks' => $request->input('remarks'),
-            ]);
+        ]);
         $ymd = Carbon::parse($dateRecord->date)->format('Y-m-d');
-        foreach($request->input('new_attendances') as $data){
-            $fullStartTime = Carbon::parse($ymd.' '.$data['start_time']);
-            $fullEndTime  = Carbon::parse($ymd.' '.$data['end_time']);
+        foreach ($request->input('new_attendances') as $data) {
+            $fullStartTime = Carbon::parse($ymd . ' ' . $data['start_time']);
+            $fullEndTime = Carbon::parse($ymd . ' ' . $data['end_time']);
             Attendance::create([
+                'user_id' => Auth::id(),
                 'date_id' => $dateRecord->id,
                 'category' => $data['category'],
-                'start_time' =>$fullStartTime,
+                'start_time' => $fullStartTime,
                 'end_time' => $fullEndTime,
                 'status' => 2,
             ]);
-        return redirect()->route('attendance-detail')->with('success','申請しました');
+            Application::create([
+                'user_id' => Auth::id(),
+                'date_id' => $dateRecord->id,
+                'application_date' => Carbon::now(),
+                'status' => 2,
+            ]);
+            return redirect()->route('attendance-detail')->with('success', '申請しました');
         }
     }
-    public function applicationList(){
-        $activeTab = $request->query('tab','pending');
-        if($activeTab === 'pending'){
-            $lists = Date::where('user_id',Auth::id())->where('application',2)->all();
+    public function applicationList(Request $request)
+    {
+        $activeTab = $request->query('tab', 'pending');
+        if ($activeTab === 'pending') {
+            $lists = Application::where('user_id', Auth::id())->where('status', 2)->orderBy('application_date', 'asc')->with('date', 'user')->get();
+        } elseif ($activeTab === 'approved') {
+            $lists = Application::where('user_id', Auth::id())->where('status', 1)->orderBy('approved_date', 'desc')->with('date', 'user')->get();
         }
-        elseif($activeTab === 'approval'){
-
-
-        }
-        return view('application_list');
+        return view('application_list', compact('lists'));
     }
 
 }
