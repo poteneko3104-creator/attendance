@@ -17,10 +17,10 @@
             <img src="/images/COACHTECHヘッダーロゴ.png" alt="COACHTECH">
         </div>
         <nav class="header-nav">
-            @if (Auth::check())
+            @if (Auth::guard('admin')->check())
                 <a href="/admin/attendance/list"><button class="btn-nav">勤怠一覧</button></a>
                 <a href="/admin/attendance/staffList"><button class="btn-nav">スタッフ一覧</button></a>
-                <a href="/stamp_correction_request/list"><button class="btn-nav">申請一覧</button></a>
+                <a href="/admin/stamp_correction_request/list"><button class="btn-nav">申請一覧</button></a>
                 <form action="/logout" method="post">
                     @csrf
                     <button class="btn-nav">ログアウト</button>

@@ -20,7 +20,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('/test', function () {
-    return view('admin.list');
+    return view('myreport');
 });
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/attendance', [AttendanceController::class, 'attendance']);
@@ -29,6 +29,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/detail', [AttendanceController::class, 'detail'])->name('attendance-detail');
     Route::post('/detail', [AttendanceController::class, 'sendApplication']);
     Route::get('/applicationList', [AttendanceController::class, 'applicationList'])->name('application_list');
+    Route::get('/myreport', [AttendanceController::class, 'myreport']);
 });
 Route::prefix('admin')->name('admin.')->middleware(['guest:admin'])->group(function () {
     Route::get('/login', [AdminController::class, 'login'])->name('login');
@@ -38,7 +39,7 @@ Route::prefix('admin')->name('admin.')->middleware(['guest:admin'])->group(funct
 Route::prefix('admin')->name('admin.')->middleware(['auth:admin'])->group(function () {
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 });
-Route::middleware(['auth', 'admin'])->group(function () {
+Route::middleware(['auth:admin'])->group(function () {
     Route::get('/admin/attendance/list', [AdminController::class, 'attendanceList'])->name('admin_attendance-list');
     Route::get('/admin/attendance/detail', [AdminController::class, 'detail'])->name('admin_attendance-detail');
     Route::post('/admin/attendance/detail', [AdminController::class, 'update']);
@@ -46,4 +47,5 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/attendance/staff', [AdminController::class, 'staffAttendance'])->name('admin_staff-attendance');
     Route::get('/admin/stamp_correction_request/list', [AdminController::class, 'applicationList'])->name('admin_application-list');
     Route::get('/admin/stamp_correction_request/approve', [AdminController::class, 'approval'])->name('admin_approval');
+    Route::post('/admin/stamp_correction_request/approve', [AdminController::class, 'completed']);
 });

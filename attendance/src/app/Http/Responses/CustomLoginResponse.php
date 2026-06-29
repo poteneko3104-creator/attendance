@@ -15,8 +15,8 @@ class CustomLoginResponse implements LoginResponseContract
      */
     public function toResponse($request)
     {
-        if ($request->is('admin/*') || $request->is('admin')) {
-            return redirect()->intended('/admin/attendance/list');
+        if (Auth::guard('admin')->check()) {
+            return redirect('/admin/attendance/list');
         }
         return redirect()->intended(config('fortify.home'));
     }

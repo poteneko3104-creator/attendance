@@ -16,11 +16,14 @@ class AdminMiddleware
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, Closure $next): Response|\Illuminate\Http\RedirectResponse
     {
-        if (!$request->is('admin') && !$request->is('admin/*')) {
-            return redirect()->route('login')->with('error', '管理者権限が必要です。');
+        if (!Auth::guard('admin')->check()) {
+
+            return redirect('/admin/login')->with('error', '管理者権限が必要です。');
         }
+
+
         return $next($request);
     }
 }

@@ -1,0 +1,119 @@
+.container {
+    max-width: 1540px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.page-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.page-subtitle {
+    font-size: 0.9rem;
+    color: #666666;
+    margin-bottom: 30px;
+}
+
+.section {
+    margin-bottom: 40px;
+}
+
+.section-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.section-subtitle {
+    font-size: 0.8rem;
+    color: #666666;
+    margin-bottom: 15px;
+}
+
+/* カード型グリッド（基本サマリー & 異常検知） */
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.card {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    padding: 20px;
+}
+
+.card-label {
+    font-size: 0.8rem;
+    color: #666666;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.card-value {
+    font-size: 1.4rem;
+    font-weight: bold;
+}
+
+/* テーブル（月次推移） */
+.table-wrapper {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.report-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.report-table th,
+.report-table td {
+    padding: 12px 20px;
+    font-size: 0.9rem;
+}
+
+.report-table th {
+    background-color: #ffffff;
+    color: #666666;
+    font-weight: bold;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.report-table td {
+    border-bottom: 1px solid #eee;
+}
+
+.report-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* レスポンシブ対応（画面幅が狭い時） */
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        gap: 10px;
+        padding: 15px;
+    }
+
+    .header-nav {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .header-nav a {
+        margin-left: 0;
+    }
+
+    .summary-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+}

@@ -29,7 +29,7 @@
             </div>
             <input type="hidden" name="date" value="{{$report->date}}">
         </div>
-        <input type="hidden" name="report_id" value="{{ $report->id }}">
+        <input type="hidden" name="date_id" value="{{ $report->id }}">
 
         @foreach($report->attendance()->where('status',$status)->where('category', '出勤')->get() as $key => $attendance)
         <div class="form-group">           

@@ -65,7 +65,11 @@ class AdminController extends Controller
     }
     public function detail(Request $request)
     {
-        $report = Date::where('id', $request->date_id)->with('user')->with('attendance')->first();
+        if (isset($request->date_id)) {
+            $report = Date::where('id', $request->date_id)->with('user')->with('attendance')->first();
+        } else {
+            return back();
+        }
         $status = $report?->application;
         return view('admin.detail', compact('report', 'status'));
     }
@@ -99,7 +103,8 @@ class AdminController extends Controller
             }
 
         }
-        return redirect()->route('admin_attendance-detail', ['id' => $date->id])->with('success', '登録しました');
+        $report = Date::where('id', $request->date_id)->with('attendance', 'user')->first();
+        return redirect()->route('admin_attendance-detail', ['date_id' => $report->id])->with('success', '登録しました');
     }
     public function staffList()
     {
@@ -198,7 +203,50 @@ class AdminController extends Controller
     }
     public function approval(Request $request)
     {
-        $report = Date::where('id', $request->date_id)->with('attendance')->with('user')->first();
+        $report = Date::where('id', $request->date_id)->first();
+
+        if ($report) {
+            $status = $report->application;
+
+            $report->load([
+                'attendance' => function ($query) use ($status) {
+                    $query->where('status', $status);
+                },
+                'user'
+            ]);
+        }
         return view('admin.approval', compact('report'));
+    }
+    public function completed(Request $request)
+    {   /*
+      $oldAttendance = Attendance::where('date_id', $request->date_id)->where('status', 1)->get();
+      $oldAttendance->update(['status', 0]);
+      $newAttendance = Attendance::where('date_id', $request->date_id)->where('status', 2)->get();
+      $newAttendance->update(['status', 1]);
+      $application = Application::where('date_id', $request->date_id)->where('status', 2)->get();
+      $application->update(['status', 1]);
+      $date = Date::where('id', $request->date_id)->get();
+      $date->update(['application' => 1]);
+      */
+        // 1. get() を削除し、配列の指定を 'status' => 0 に修正
+        Attendance::where('date_id', $request->date_id)
+            ->where('status', 1)
+            ->update(['status' => 0]);
+
+        // 2. 同様に get() を削除し、'status' => 1 に修正
+        Attendance::where('date_id', $request->date_id)
+            ->where('status', 2)
+            ->update(['status' => 1]);
+
+        // 3. 同様に修正
+        Application::where('date_id', $request->date_id)
+            ->where('status', 2)
+            ->update(['status' => 1]);
+
+        // 4. 同様に修正
+        Date::where('id', $request->date_id)
+            ->update(['application' => 1]);
+        $report = Date::where('id', $request->date_id)->with('attendance')->with('user')->first();
+        return redirect()->route('admin_attendance-detail', ['report' => $report])->with('success', '登録しました');
     }
 }

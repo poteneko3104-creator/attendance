@@ -202,15 +202,16 @@ class AttendanceController extends Controller
                 'end_time' => $fullEndTime,
                 'status' => 2,
             ]);
-            Application::create([
-                'user_id' => Auth::id(),
-                'date_id' => $dateRecord->id,
-                'application_date' => Carbon::now(),
-                'status' => 2,
-            ]);
-            return redirect()->route('attendance-detail')->with('success', '申請しました');
         }
+        Application::create([
+            'user_id' => Auth::id(),
+            'date_id' => $dateRecord->id,
+            'application_date' => Carbon::now(),
+            'status' => 2,
+        ]);
+        return redirect()->route('attendance-detail', ['date' => $dateRecord->date])->with('success', '申請しました');
     }
+
     public function applicationList(Request $request)
     {
         $activeTab = $request->query('tab', 'pending');
@@ -221,5 +222,156 @@ class AttendanceController extends Controller
         }
         return view('application_list', compact('lists'));
     }
+    public function myreport()
+    {
+        $userId = Auth::id() ?? 1;
 
+        // 過去6ヶ月の範囲を設定（今月を含む6ヶ月前の一日まで）
+        $sixMonthsAgo = Carbon::now()->subMonths(5)->startOfMonth();
+        $today = Carbon::now()->endOfMonth();
+
+        // datesと、有効なattendances（statusが0以外の登録済み・申請中データ）をEager Loading
+        $attendanceData = Date::where('user_id', $userId)
+            ->whereBetween('date', [$sixMonthsAgo->format('Y-m-d'), $today->format('Y-m-d')])
+            ->with([
+                'attendance' => function ($query) {
+                    $query->where('status', 1); // 修正前データ(0)を除外 申請中も除外
+                }
+            ])
+            ->orderBy('date', 'asc')
+            ->get();
+
+        // --- 集計用変数の初期化 ---
+        $totalMinutes = 0;
+        $totalOvertimeMinutes = 0;
+        $workingDays = 0;
+
+        // 月次推移用配列の初期化
+        $monthlyTrends = [];
+        for ($i = 5; $i >= 0; $i--) {
+            $monthStr = Carbon::now()->subMonths($i)->format('Y-m');
+            $monthlyTrends[$monthStr] = [
+                'month' => $monthStr,
+                'total_minutes' => 0,
+                'overtime_minutes' => 0,
+            ];
+        }
+
+        // 今月の異常検知用
+        $currentMonthStr = Carbon::now()->format('Y-m');
+        $lateCount = 0;
+        $earlyLeaveCount = 0;
+        $longWorkingDays = 0;
+
+        // --- データ集計ロジック ---
+        foreach ($attendanceData as $record) {
+            $recordDate = Carbon::parse($record->date);
+            $monthKey = $recordDate->format('Y-m');
+
+            $attendances = $record->attendance;
+            if ($attendances->isEmpty()) {
+                continue;
+            }
+
+            // 1. 出勤データから拘束時間を計算
+            $workRecords = $attendances->where('category', '出勤');
+            $dailyWorkMinutes = 0;
+            $firstCheckIn = null;
+            $lastCheckOut = null;
+
+            foreach ($workRecords as $work) {
+                if ($work->start_time && $work->end_time) {
+                    $start = Carbon::parse($work->start_time);
+                    $end = Carbon::parse($work->end_time);
+                    $dailyWorkMinutes += $start->diffInMinutes($end);
+
+                    // 異常検知用に、その日の「最初の出勤」と「最後の退勤」を保持
+                    if (is_null($firstCheckIn) || $start->lt($firstCheckIn)) {
+                        $firstCheckIn = $start;
+                    }
+                    if (is_null($lastCheckOut) || $end->gt($lastCheckOut)) {
+                        $lastCheckOut = $end;
+                    }
+                }
+            }
+
+            // 出勤データがない場合はスキップ
+            if ($dailyWorkMinutes === 0) {
+                continue;
+            }
+            $workingDays++;
+
+            // 2. 休憩データから総休憩時間を計算して差し引く
+            $restRecords = $attendances->where('category', '休憩');
+            $dailyRestMinutes = 0;
+
+            foreach ($restRecords as $rest) {
+                if ($rest->start_time && $rest->end_time) {
+                    $dailyRestMinutes += Carbon::parse($rest->start_time)->diffInMinutes(Carbon::parse($rest->end_time));
+                }
+            }
+
+            // 実労働時間 = 拘束時間 - 休憩時間
+            $dailyNetWorkingMinutes = max(0, $dailyWorkMinutes - $dailyRestMinutes);
+
+            // 残業時間の計算 (1日8時間 = 480分 を超えた分)
+            $dailyOvertimeMinutes = max(0, $dailyNetWorkingMinutes - 480);
+
+            // 全体サマリーへの加算
+            $totalMinutes += $dailyNetWorkingMinutes;
+            $totalOvertimeMinutes += $dailyOvertimeMinutes;
+
+            // 月次推移への加算
+            if (isset($monthlyTrends[$monthKey])) {
+                $monthlyTrends[$monthKey]['total_minutes'] += $dailyNetWorkingMinutes;
+                $monthlyTrends[$monthKey]['overtime_minutes'] += $dailyOvertimeMinutes;
+            }
+
+            // 3. 今月の異常検知ロジック (基準: 始業 09:00 / 終業 18:00 / 長時間 10時間)
+            if ($monthKey === $currentMonthStr) {
+                // 遅刻判定 (最初の出勤が09:00:59より後ろ)
+                if ($firstCheckIn && $firstCheckIn->format('H:i:s') > '09:00:59') {
+                    $lateCount++;
+                }
+                // 早退判定 (最後の退勤が18:00:00より前)
+                if ($lastCheckOut && $lastCheckOut->format('H:i:s') < '18:00:00') {
+                    $earlyLeaveCount++;
+                }
+                // 長時間労働判定 (実労働時間が10時間 = 600分超え)
+                if ($dailyNetWorkingMinutes > 600) {
+                    $longWorkingDays++;
+                }
+            }
+        }
+
+        // --- 画面表示用に「Xh Ym」形式へフォーマット変換 ---
+        $summary = [
+            'total_work' => $this->formatMinutesToHours($totalMinutes),
+            'total_overtime' => $this->formatMinutesToHours($totalOvertimeMinutes),
+            'average_work' => $workingDays > 0 ? $this->formatMinutesToHours($totalMinutes / $workingDays) : '0h 0m',
+        ];
+
+        foreach ($monthlyTrends as $key => $trend) {
+            $monthlyTrends[$key]['total_hours'] = $this->formatMinutesToHours($trend['total_minutes']);
+            $monthlyTrends[$key]['overtime_hours'] = $this->formatMinutesToHours($trend['overtime_minutes']);
+        }
+
+        $anomalies = [
+            'late' => $lateCount,
+            'early' => $earlyLeaveCount,
+            'long_work' => $longWorkingDays,
+        ];
+
+        return view('myreport', compact('summary', 'monthlyTrends', 'anomalies'));
+    }
+
+    /**
+     * 分を「Xh Ym」の文字列に変換
+     */
+    private function formatMinutesToHours($minutes)
+    {
+        $hours = floor($minutes / 60);
+        $remainingMinutes = round($minutes % 60);
+        return "{$hours}h {$remainingMinutes}m";
+    }
 }

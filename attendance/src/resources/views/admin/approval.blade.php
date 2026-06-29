@@ -22,19 +22,19 @@
                     <th>日付</th>
                     <td>{{ \Carbon\Carbon::parse($report->date)->format('Y年m月d日') }}</td>
                 </tr>
-                @foreach ($report->attendance as $item){
-                    @if($item->status == 2)
+                @foreach ($report->attendance as $item)
                     <tr>
-                        @if($item->category = '出勤'){
+                        @if($item->category = '出勤')
                             <th>出勤・退勤</th>
-                            }
-                        @elseif($item->category = '休憩'){
+
+                        @elseif($item->category = '休憩')
                             <th>休憩</th>
-                        }@endif
-                        <td>{{ \Carbon\Carbon::parse($item->start_time)->format('H:i') }}<span class="time-separator">〜</span>{{ \Carbon\Carbon::parse($item->start_time)->format('H:i') }}</td>
+                        @endif
+                        <td>{{ \Carbon\Carbon::parse($item->start_time)->format('H:i') }}<span
+                                class="time-separator">〜</span>{{ \Carbon\Carbon::parse($item->start_time)->format('H:i') }}
+                        </td>
                     </tr>
-                    }
-                    @endif
+
                 @endforeach
                 <tr>
                     <th>備考</th>
@@ -47,7 +47,12 @@
         <div class="actions-area">
             <form action="#" method="POST">
                 @csrf
-                <button type="submit" class="btn-approve">承認</button>
+                <input type="hidden" name="date_id" value="{{ $report->id }}">
+                @if($report->application == 2)
+                    <button type="submit" class="btn-approve">承認</button>
+                @elseif($report->application == 1)
+                    <div class="btn-nonactive">承認済み</div>
+                @endif
             </form>
         </div>
     </div>

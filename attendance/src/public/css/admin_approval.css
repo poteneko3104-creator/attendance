@@ -86,3 +86,13 @@
 .btn-approve:hover {
     background-color: #333333;
 }
+
+.btn-nonactive {
+    background-color: #696969;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    padding: 12px 45px;
+    font-size: 16px;
+    font-weight: bold;
+}
