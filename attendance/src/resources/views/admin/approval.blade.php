@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 @section('title')
-    <title>申請一覧画面</title>
+    <title>修正申請承認</title>
 @endsection
 
 @section('css')
@@ -11,7 +11,6 @@
     <div class="container">
         <h1 class="page-title">勤怠詳細</h1>
 
-        <!-- 詳細カード -->
         <table class="detail-card">
             <tbody>
                 <tr>
@@ -43,7 +42,6 @@
             </tbody>
         </table>
 
-        <!-- 承認アクションボタン -->
         <div class="actions-area">
             <form action="#" method="POST">
                 @csrf

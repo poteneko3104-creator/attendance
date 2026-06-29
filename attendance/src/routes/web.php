@@ -16,12 +16,6 @@ use App\Http\Controllers\AdminController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-Route::get('/test', function () {
-    return view('myreport');
-});
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/attendance', [AttendanceController::class, 'attendance']);
     Route::post('/attendance', [AttendanceController::class, 'submit']);

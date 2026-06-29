@@ -12,8 +12,10 @@
         <h1 class="page-title">申請一覧</h1>
 
         <div class="tabs">
-            <a href="{{route('application_list', ['tab' => 'pending'])}}" class="tab-btn">承認待ち</a>
-            <a href="{{route('application_list', ['tab' => 'approved'])}}" class="tab-btn">承認済み</a>
+            <a href="{{route('application_list', ['tab' => 'pending'])}}"
+                class="tab-btn {{ request('tab') !== 'approved' ? 'active' : '' }}">承認待ち</a>
+            <a href="{{route('application_list', ['tab' => 'approved'])}}"
+                class="tab-btn {{ request('tab') === 'approved' ? 'active' : '' }}">承認済み</a>
         </div>
         <div class="table-wrapper">
             <table class="application-table">

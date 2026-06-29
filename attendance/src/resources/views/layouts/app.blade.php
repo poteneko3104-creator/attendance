@@ -16,6 +16,12 @@
         <div class="header-logo">
             <img src="/images/COACHTECHヘッダーロゴ.png" alt="COACHTECH">
         </div>
+        <input type="checkbox" id="menu-toggle" class="menu-checkbox">
+        <label for="menu-toggle" class="hamburger-btn">
+            <span></span>
+            <span></span>
+            <span></span>
+        </label>
         <nav class="header-nav">
             @if (Auth::check())
                 <a href="/attendance"><button class="btn-nav">勤怠</button></a>

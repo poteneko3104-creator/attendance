@@ -32,7 +32,6 @@
     margin-bottom: 15px;
 }
 
-/* カード型グリッド（基本サマリー & 異常検知） */
 .summary-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -58,7 +57,6 @@
     font-weight: bold;
 }
 
-/* テーブル（月次推移） */
 .table-wrapper {
     background-color: #ffffff;
     border: 1px solid #e0e0e0;
@@ -93,25 +91,8 @@
     border-bottom: none;
 }
 
-/* レスポンシブ対応（画面幅が狭い時） */
-@media (max-width: 768px) {
-    .header {
-        flex-direction: column;
-        gap: 10px;
-        padding: 15px;
-    }
 
-    .header-nav {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 10px;
-    }
-
-    .header-nav a {
-        margin-left: 0;
-    }
-
+@media (max-width: 850px) {
     .summary-grid {
         grid-template-columns: 1fr;
         gap: 15px;

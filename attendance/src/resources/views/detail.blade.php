@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title')
-    <title>勤怠一覧</title>
+    <title>勤怠詳細</title>
 @endsection
 
 @section('css')
@@ -9,17 +9,14 @@
 
 @section('content')
 <div class="attendance-container">
-    <h2 class="title">勤怠詳細</h2>
+    <h1 class="title">勤怠詳細</h1>
 
     <form action="/detail" method="POST" class="detail-card">
         @csrf
-        <!-- 名前 -->
         <div class="form-group">
             <label class="form-label">名前</label>
             <div class="form-value font-bold">{{$user->name}}</div>
         </div>
-
-        <!-- 日付 -->
         <div class="form-group">
             <label class="form-label">日付</label>
             <div class="form-value font-bold date-layout">
@@ -92,7 +89,6 @@
             @endif
         </div>
 
-        <!-- 備考 -->
         <div class="form-group">
             <label class="form-label">備考</label>
             <div class="form-value">
@@ -104,8 +100,6 @@
             </div>
             @enderror
         </div>
-
-        <!-- ボタンエリア -->
         @if($date->application==2)
         <div class="aleart-message">*承認待ちのため申請できません</div>
         @else

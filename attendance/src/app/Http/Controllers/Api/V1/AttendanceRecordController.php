@@ -18,16 +18,12 @@ class AttendanceRecordController extends Controller
     }
     public function show(Request $request, $id)
     {
-
         $dateRecord = Date::where('id', $id)
             ->where('user_id', $request->user()->id)
             ->firstOrFail();
-
-
         $attendanceRecord = Attendance::where('date_id', $dateRecord->id)
             ->where('category', '出勤')
             ->first();
-
         return response()->json([
             'date_info' => $dateRecord,
             'attendance_info' => $attendanceRecord
@@ -35,7 +31,6 @@ class AttendanceRecordController extends Controller
     }
     public function store(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
             'date' => 'required|date',
             'clock_in' => 'required|date_format:H:i:s',
@@ -62,7 +57,6 @@ class AttendanceRecordController extends Controller
         $exists = Date::where('user_id', $userId)
             ->where('date', $validated['date'])
             ->exists();
-
         if ($exists) {
             return response()->json([
                 'error' => '指定された日付の勤怠記録は既に存在します。'
@@ -70,7 +64,6 @@ class AttendanceRecordController extends Controller
         }
 
         $record = DB::transaction(function () use ($validated, $userId) {
-
             $dateRecord = Date::create([
                 'user_id' => $userId,
                 'date' => $validated['date'],
@@ -78,8 +71,6 @@ class AttendanceRecordController extends Controller
                 'remarks' => $validated['comment'] ?? null,
                 'status' => $validated['clock_out'] ? 3 : 1,
             ]);
-
-
             $startTime = $validated['date'] . ' ' . $validated['clock_in'];
             $endTime = $validated['clock_out'] ? ($validated['date'] . ' ' . $validated['clock_out']) : null;
 
@@ -91,14 +82,11 @@ class AttendanceRecordController extends Controller
                 'category' => '出勤',
                 'status' => 1,
             ]);
-
-
             return [
                 'date_info' => $dateRecord,
                 'attendance_info' => $attendanceRecord
             ];
         });
-
         return response()->json($record, 201);
     }
     public function update(Request $request, $id)
@@ -127,8 +115,6 @@ class AttendanceRecordController extends Controller
 
         $validated = $validator->validated();
         $userId = $request->user()->id;
-
-
         $exists = Date::where('user_id', $userId)
             ->where('date', $validated['date'])
             ->where('id', '!=', $id)
@@ -145,15 +131,11 @@ class AttendanceRecordController extends Controller
             $dateRecord = Date::where('id', $id)
                 ->where('user_id', $request->user()->id)
                 ->firstOrFail();
-
-
             $dateRecord->update([
                 'date' => $validated['date'],
                 'remarks' => $validated['comment'] ?? null,
-                'status' => $validated['clock_out'] ? 3 : 1, // 退勤時間があれば3、なければ1
+                'status' => $validated['clock_out'] ? 3 : 1,
             ]);
-
-
             $attendanceRecord = Attendance::where('date_id', $dateRecord->id)
                 ->where('category', '出勤')
                 ->firstOrFail();
@@ -171,8 +153,6 @@ class AttendanceRecordController extends Controller
                 'attendance_info' => $attendanceRecord
             ];
         });
-
-
         return response()->json($record, 200);
     }
 
@@ -181,11 +161,7 @@ class AttendanceRecordController extends Controller
         $dateRecord = Date::where('id', $id)
             ->where('user_id', $request->user()->id)
             ->firstOrFail();
-
-
         $dateRecord->delete();
-
-
         return response()->noContent();
     }
 }

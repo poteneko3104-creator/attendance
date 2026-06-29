@@ -9,11 +9,10 @@
 
 @section('content')
 <div class="attendance-container">
-    <h2 class="title">勤怠詳細</h2>
+    <h1 class="title">勤怠詳細</h1>
 
     <form action="/admin/attendance/detail" method="POST" class="detail-card">
         @csrf
-        <!-- 名前 -->
         <div class="form-group">
             <label class="form-label">名前</label>            
             <div class="form-value font-bold">{{$report->user->name}}</div>

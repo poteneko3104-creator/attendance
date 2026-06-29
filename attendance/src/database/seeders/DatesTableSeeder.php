@@ -35,6 +35,14 @@ class DatesTableSeeder extends Seeder
             'status' => 3,
         ];
         DB::table('dates')->insert($param);
+        $param = [
+            'id' => 3,
+            'user_id' => 1,
+            'date' => '2026-06-03',
+            'application' => 2,
+            'status' => 3,
+        ];
+        DB::table('dates')->insert($param);
 
         Date::factory()->count(20)->create()->each(function ($date) {
 
@@ -51,6 +59,13 @@ class DatesTableSeeder extends Seeder
                     'user_id' => $date->user_id,
                     'date_id' => $date->id,
                     'category' => '出勤',
+                    'status' => 2,
+                ]);
+
+                Attendance::factory()->create([
+                    'user_id' => $date->user_id,
+                    'date_id' => $date->id,
+                    'category' => '休憩',
                     'status' => 2,
                 ]);
 

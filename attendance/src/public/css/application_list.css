@@ -26,10 +26,16 @@
     border: none;
     font-size: 14px;
     font-weight: bold;
-    color: #333333;
+    color: #777777;
     padding-bottom: 10px;
     cursor: pointer;
     position: relative;
+    text-decoration: none;
+    margin: 30px;
+}
+
+.tab-btn.active {
+    color: #000000;
 }
 
 .table-wrapper {

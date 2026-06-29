@@ -9,11 +9,9 @@
 
 @section('content')
   <div class="container">
-
     <div class="page-title">
       <h1>勤怠一覧</h1>
     </div>
-
     <div class="calendar-nav">
       <a href="{{ route('attendance-list', ['month' => $prevMonth]) }}" class="nav-btn">&larr; 前月</a>
       <div class="current-month">
@@ -21,7 +19,6 @@
       </div>
       <a href="{{ route('attendance-list', ['month' => $nextMonth]) }}" class="nav-btn">翌月 &rarr;</a>
     </div>
-
     <div class="table-wrapper">
       <table class="attendance-table">
         <thead>
@@ -35,7 +32,6 @@
           </tr>
         </thead>
         <tbody>
-
           @foreach($dailyReports as $report)
             <tr>
               <td>{{ $report['date']->copy()->format('m/d') }}{{ $report['day_of_week'] }}</td>
@@ -50,6 +46,5 @@
         </tbody>
       </table>
     </div>
-
   </div>
 @endsection

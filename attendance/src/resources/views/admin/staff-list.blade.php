@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 @section('title')
-    <title>勤怠一覧</title>
+    <title>スタッフ一覧</title>
 @endsection
 
 @section('css')
@@ -11,7 +11,6 @@
     <div class="main-container">
         <h1 class="page-title">スタッフ一覧</h1>
 
-        <!-- テーブルカード -->
         <div class="table-card">
             <table class="staff-table">
                 <thead>

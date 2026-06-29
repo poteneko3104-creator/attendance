@@ -78,5 +78,41 @@ class AttendancesTableSeeder extends Seeder
             'status' => 1
         ];
         DB::table('attendances')->insert($param);
+        $param = [
+            'user_id' => 1,
+            'date_id' => 3,
+            'start_time' => '2026-06-03 12:00:00',
+            'end_time' => '2026-06-03 13:00:00',
+            'category' => '休憩',
+            'status' => 1
+        ];
+        DB::table('attendances')->insert($param);
+        $param = [
+            'user_id' => 1,
+            'date_id' => 3,
+            'start_time' => '2026-06-03 08:00:00',
+            'end_time' => '2026-06-03 21:15:00',
+            'category' => '出勤',
+            'status' => 1
+        ];
+        DB::table('attendances')->insert($param);
+        $param = [
+            'user_id' => 1,
+            'date_id' => 3,
+            'start_time' => '2026-06-03 11:00:00',
+            'end_time' => '2026-06-03 13:00:00',
+            'category' => '休憩',
+            'status' => 2
+        ];
+        DB::table('attendances')->insert($param);
+        $param = [
+            'user_id' => 1,
+            'date_id' => 3,
+            'start_time' => '2026-06-03 08:00:00',
+            'end_time' => '2026-06-03 21:45:00',
+            'category' => '出勤',
+            'status' => 2
+        ];
+        DB::table('attendances')->insert($param);
     }
 }

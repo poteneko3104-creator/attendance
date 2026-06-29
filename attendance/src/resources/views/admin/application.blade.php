@@ -11,7 +11,6 @@
     <div class="container">
         <h1 class="page-title">申請一覧</h1>
 
-        <!-- タブ切り替え -->
         <ul class="tab-menu">
             <li class="tab-item {{ request('tab') !== 'approved' ? 'active' : '' }}">
                 <a href="{{ route('admin_application-list', ['tab' => 'pending']) }}">
@@ -25,7 +24,6 @@
             </li>
         </ul>
 
-        <!-- テーブルカード -->
         <div class="table-wrapper">
             <table class="data-table">
                 <thead>

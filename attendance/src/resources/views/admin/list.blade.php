@@ -9,12 +9,11 @@
 
 @section('content')
   <div class="container">
-    <!-- タイトルエリア -->
+
     <div class="page-title">
       <h1>{{$dateObject->format('Y年m月d日')}}</h1>
     </div>
 
-    <!-- カレンダーナビゲーション -->
     <div class="calendar-nav">
       <a href="{{ route('admin_attendance-list', ['date' => $prevDate]) }}" class="nav-btn">&larr; 前日</a>
       <div class="current-month">
@@ -23,7 +22,6 @@
       <a href="{{ route('admin_attendance-list', ['date' => $nextDate]) }}" class="nav-btn">翌日 &rarr;</a>
     </div>
 
-    <!-- 勤怠テーブル -->
     <div class="table-wrapper">
       <table class="attendance-table">
         <thead>

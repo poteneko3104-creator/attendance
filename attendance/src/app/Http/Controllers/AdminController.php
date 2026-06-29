@@ -60,7 +60,6 @@ class AdminController extends Controller
     }
     public function login()
     {
-
         return view('admin.auth.login');
     }
     public function detail(Request $request)
@@ -141,7 +140,6 @@ class AdminController extends Controller
             $dayOfWeek = $date->isoFormat('dd');
             $dateString = $date->format('Y-m-d');
             if ($attendances->has($dateString)) {
-                //$dayAttendances = $attendances[$dateString];
                 $dayRecord = $attendances->get($dateString)?->first();
                 $attend_start = $dayRecord?->attendance?->where('category', '出勤')->where('status', 1)->first()?->start_time;
                 $clockIn = Carbon::parse($attend_start);
@@ -204,10 +202,8 @@ class AdminController extends Controller
     public function approval(Request $request)
     {
         $report = Date::where('id', $request->date_id)->first();
-
         if ($report) {
             $status = $report->application;
-
             $report->load([
                 'attendance' => function ($query) use ($status) {
                     $query->where('status', $status);
@@ -218,32 +214,16 @@ class AdminController extends Controller
         return view('admin.approval', compact('report'));
     }
     public function completed(Request $request)
-    {   /*
-      $oldAttendance = Attendance::where('date_id', $request->date_id)->where('status', 1)->get();
-      $oldAttendance->update(['status', 0]);
-      $newAttendance = Attendance::where('date_id', $request->date_id)->where('status', 2)->get();
-      $newAttendance->update(['status', 1]);
-      $application = Application::where('date_id', $request->date_id)->where('status', 2)->get();
-      $application->update(['status', 1]);
-      $date = Date::where('id', $request->date_id)->get();
-      $date->update(['application' => 1]);
-      */
-        // 1. get() を削除し、配列の指定を 'status' => 0 に修正
+    {
         Attendance::where('date_id', $request->date_id)
             ->where('status', 1)
             ->update(['status' => 0]);
-
-        // 2. 同様に get() を削除し、'status' => 1 に修正
         Attendance::where('date_id', $request->date_id)
             ->where('status', 2)
             ->update(['status' => 1]);
-
-        // 3. 同様に修正
         Application::where('date_id', $request->date_id)
             ->where('status', 2)
             ->update(['status' => 1]);
-
-        // 4. 同様に修正
         Date::where('id', $request->date_id)
             ->update(['application' => 1]);
         $report = Date::where('id', $request->date_id)->with('attendance')->with('user')->first();
