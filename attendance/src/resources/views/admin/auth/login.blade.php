@@ -15,7 +15,7 @@
       @csrf
       <div class="form-group">
         <label for="email" class="form-label">メールアドレス</label>
-        <input type="email" id="email" name="email" class="form-input" required>
+        <input type="email" id="email" name="email" class="form-input" value="{{ old('email') }}" required>
       </div>
       @if($errors->any('email'))
         <span class="alert-text">{{$errors->first('email')}}</span>

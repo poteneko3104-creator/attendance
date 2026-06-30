@@ -112,7 +112,8 @@ class AdminController extends Controller
     }
     public function staffAttendance(Request $request)
     {
-        $user = User::find($request->user_id)->first();
+        $user = User::where('id', $request->user_id)->first();
+
         $monthParam = $request->query('month', Carbon::now()->format('Y-m'));
         try {
             $currentMonth = Carbon::parse($monthParam . '-01');
@@ -203,13 +204,21 @@ class AdminController extends Controller
     {
         $report = Date::where('id', $request->date_id)->first();
         if ($report) {
-            $status = $report->application;
-            $report->load([
-                'attendance' => function ($query) use ($status) {
-                    $query->where('status', $status);
-                },
-                'user'
-            ]);
+            if ($report->application == 1) {
+                $report->load([
+                    'attendance' => function ($query) {
+                        $query->where('status', 1);
+                    },
+                    'user'
+                ]);
+            } elseif ($report->application == 2) {
+                $report->load([
+                    'attendance' => function ($query) {
+                        $query->where('status', 2);
+                    },
+                    'user'
+                ]);
+            }
         }
         return view('admin.approval', compact('report'));
     }

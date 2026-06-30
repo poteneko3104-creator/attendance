@@ -195,14 +195,25 @@ class AttendanceController extends Controller
         foreach ($request->input('new_attendances') as $data) {
             $fullStartTime = Carbon::parse($ymd . ' ' . $data['start_time']);
             $fullEndTime = Carbon::parse($ymd . ' ' . $data['end_time']);
-            Attendance::create([
-                'user_id' => Auth::id(),
-                'date_id' => $dateRecord->id,
-                'category' => $data['category'],
-                'start_time' => $fullStartTime,
-                'end_time' => $fullEndTime,
-                'status' => 2,
-            ]);
+            if (isset($data['start_time']) && isset($data['end_time'])) {
+                Attendance::create([
+                    'user_id' => Auth::id(),
+                    'date_id' => $dateRecord->id,
+                    'category' => $data['category'],
+                    'start_time' => $fullStartTime,
+                    'end_time' => $fullEndTime,
+                    'status' => 2,
+                ]);
+            } elseif (isset($data['start_time']) && !isset($data['end_time'])) {
+                Attendance::create([
+                    'user_id' => Auth::id(),
+                    'date_id' => $dateRecord->id,
+                    'category' => $data['category'],
+                    'start_time' => $fullStartTime,
+                    'end_time' => $fullEndTime,
+                    'status' => 2,
+                ]);
+            }
         }
         Application::create([
             'user_id' => Auth::id(),

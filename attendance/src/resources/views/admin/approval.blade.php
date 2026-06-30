@@ -21,16 +21,19 @@
                     <th>日付</th>
                     <td>{{ \Carbon\Carbon::parse($report->date)->format('Y年m月d日') }}</td>
                 </tr>
+
                 @foreach ($report->attendance as $item)
                     <tr>
-                        @if($item->category = '出勤')
+                        @if($item->category == '出勤')
                             <th>出勤・退勤</th>
 
-                        @elseif($item->category = '休憩')
+                        @elseif($item->category == '休憩')
                             <th>休憩</th>
                         @endif
-                        <td>{{ \Carbon\Carbon::parse($item->start_time)->format('H:i') }}<span
-                                class="time-separator">〜</span>{{ \Carbon\Carbon::parse($item->start_time)->format('H:i') }}
+                        <td>
+                            {{ \Carbon\Carbon::parse($item->start_time)->format('H:i') }}
+                            <span class="time-separator">〜</span>
+                            {{ \Carbon\Carbon::parse($item->end_time)->format('H:i') }}
                         </td>
                     </tr>
 

@@ -28,4 +28,8 @@
         <server name="SESSION_DRIVER" value="array"/>
         <server name="TELESCOPE_ENABLED" value="false"/>
     </php>
+    <php>
+        <env name="APP_KEY" value="base64:8DUskYASf9oQL3ktlExYhfisdfJqerkvrz3Ri1h5kHs="/>
+    </php>
+    
 </phpunit>
