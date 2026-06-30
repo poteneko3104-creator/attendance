@@ -37,6 +37,19 @@ fortifyインストール
 PHPunit実装
 1. docker-compose exec php bash
 2. composer require --dev phpunit/phpunit
+3. cp .env .env.testing
+4. .env.testingに記述
+        APP_NAME=Laravel
+        APP_ENV=test
+        APP_KEY=
+        APP_DEBUG=true
+        APP_URL=http://localhost
+
+5. php artisan key:generate --env=testing
+6. php artisan migrate --env=testing
+7. phpunit.xmlに以下を記述
+        　<server name="DB_CONNECTION" value="mysql_test"/>
+　         <server name="DB_DATABASE" value="demo_test"/>
 
 Mailhogの実装
 1 .envに以下の環境変数を追加
